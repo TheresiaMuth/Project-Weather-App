@@ -1,0 +1,119 @@
+body {
+  background-color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 200;
+}
+.container {
+  color: rgb(240, 240, 240);
+  background: rgb(16 0 48 / 96%);
+  border-radius: 10px;
+  box-shadow: 2px 5px 8px 2px rgba(0, 0, 0, 0.1);
+  width: 650px;
+  padding: 20px 30px;
+  margin: 20px auto;
+}
+
+#current-weather-description,
+#today-max-min,
+#unit-selection {
+  font-size: 24px;
+}
+
+#current-weather-description,
+#current-weather-icon,
+#current-city,
+#current-temperature {
+  line-height: 1;
+}
+
+#current-city {
+  font-size: 52px;
+  font-weight: 100;
+}
+
+#felt-like,
+#add-info {
+  font-size: 12px;
+}
+
+#current-temperature {
+  font-size: 90px;
+  font-weight: 100;
+}
+
+#current-weather-icon {
+  font-size: 110px;
+  -webkit-text-stroke: 5px rgb(16 0 48 / 96%);
+}
+
+.card {
+  background: none;
+  border: none;
+}
+
+.card-body {
+  padding: 0px;
+}
+
+.card-title {
+  font-size: 36px;
+  padding-bottom: 3px;
+  -webkit-text-stroke: 1px rgb(16 0 48 / 96%);
+}
+
+#select-f,
+#select-c,
+.temp-min {
+  text-decoration: none;
+  color: rgb(134, 132, 158);
+}
+
+.selectedUnit {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 300;
+}
+
+.selectedUnit:hover {
+  cursor: default;
+}
+
+.mycustom {
+  position: relative;
+}
+
+#city-search {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  margin-left: 4px;
+}
+
+#button-go {
+  visibility: hidden;
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  bottom: 4px;
+  z-index: 9;
+  border: hidden;
+  color: grey;
+}
+
+#button-go:hover {
+  color: rgb(16, 0, 48);
+}
+
+.btn-outline-light:hover {
+  color: rgb(16 0 48 / 96%);
+  background-color: white;
+  border-color: rgb(16 0 48 / 96%);
+}
+
+#current-location-button:active,
+#current-location-button:focus,
+.form-control:active,
+.form-control:focus,
+#button-go:active,
+#button-go:focus {
+  outline: none;
+  box-shadow: none;
+}
