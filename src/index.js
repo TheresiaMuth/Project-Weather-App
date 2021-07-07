@@ -1,4 +1,3 @@
-//current Date
 let days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 let months = [
@@ -36,6 +35,10 @@ const weatherIconMap = {
   "50d": "bi-cloud-haze",
   "50n": "bi-cloud-haze",
 };
+
+let apiKey = "76451f6db74c0c91e584bf9b2989b165";
+
+let unit = "metric";
 
 let citySearchForm = document.querySelector("#city-searchbar");
 
@@ -157,8 +160,6 @@ function resetSearchForm() {
 function selectCityBySearch(event) {
   event.preventDefault();
   let city = document.querySelector("#city-search")?.value;
-  let apiKey = "76451f6db74c0c91e584bf9b2989b165";
-  let unit = "metric";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
 
   axios
@@ -180,8 +181,6 @@ function selectCityBySearch(event) {
 function selectCityByGeo(position) {
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
-  let apiKey = "76451f6db74c0c91e584bf9b2989b165";
-  let unit = "metric";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${unit}`;
 
   axios
@@ -202,8 +201,6 @@ function selectCityByGeo(position) {
 
 function loadStartingPage() {
   let city = "München";
-  let apiKey = "76451f6db74c0c91e584bf9b2989b165";
-  let unit = "metric";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
 
   axios.get(apiUrl).then(showWeatherCurrentDay).then(showCurrentDate);
