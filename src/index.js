@@ -40,6 +40,10 @@ let apiKey = "76451f6db74c0c91e584bf9b2989b165";
 
 let unit = "metric";
 
+let isFahrenheit = false;
+
+let temperatureCelcius = null;
+
 let citySearchForm = document.querySelector("#city-searchbar");
 
 let citySearchFormButton = document.querySelector("#button-go");
@@ -65,7 +69,8 @@ function showCurrentDate() {
 }
 
 function showWeatherCurrentDay(response) {
-  let currentTemperature = Math.round(response.data.main.temp);
+  temperatureCelcius = response.data.main.temp;
+  let currentTemperature = Math.round(temperatureCelcius);
   let maxTemperature = Math.round(response.data.main.temp_max);
   let minTemperature = Math.round(response.data.main.temp_min);
   let feltLike = Math.round(response.data.main.feels_like);
@@ -169,6 +174,9 @@ function selectCityBySearch(event) {
       showCityBySearch(response);
       showCurrentDate();
       resetSearchForm();
+      if (isFahrenheit) {
+        displayTemperatureAsFahrenheit();
+      }
     })
     .catch((error) => {
       showDataNotAvailable();
@@ -190,6 +198,9 @@ function selectCityByGeo(position) {
       showCityByGeo(response);
       showCurrentDate();
       resetSearchForm();
+      if (isFahrenheit) {
+        displayTemperatureAsFahrenheit();
+      }
     })
     .catch((error) => {
       showDataNotAvailable();
@@ -229,12 +240,18 @@ function calculateCelciusToFahrenheit(tempCelcius) {
 
 function selectCelcius(event) {
   event.preventDefault();
+  isFahrenheit = false;
+
   let fahrenheit = document.querySelector("#select-f");
   fahrenheit.classList.remove("disable", "selectedUnit");
   event.target.classList.add("disable", "selectedUnit");
   event.target.removeEventListener("click", selectCelcius);
   fahrenheit.addEventListener("click", selectFahrenheit);
 
+  displayTemperatureAsCelcius();
+}
+
+function displayTemperatureAsCelcius() {
   document.querySelectorAll(".temp").forEach((element) => {
     let tempInt = parseInt(element.innerHTML, 10);
     element.innerHTML = Math.round(calculateFahrenheitToCelcius(tempInt));
@@ -243,12 +260,18 @@ function selectCelcius(event) {
 
 function selectFahrenheit(event) {
   event.preventDefault();
+  isFahrenheit = true;
+
   let celcius = document.querySelector("#select-c");
   celcius.classList.remove("disable", "selectedUnit");
   event.target.classList.add("disable", "selectedUnit");
   event.target.removeEventListener("click", selectFahrenheit);
   celcius.addEventListener("click", selectCelcius);
 
+  displayTemperatureAsFahrenheit();
+}
+
+function displayTemperatureAsFahrenheit() {
   document.querySelectorAll(".temp").forEach((element) => {
     let tempInt = parseInt(element.innerHTML, 10);
     element.innerHTML = Math.round(calculateCelciusToFahrenheit(tempInt));
