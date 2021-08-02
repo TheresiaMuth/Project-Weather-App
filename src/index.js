@@ -105,6 +105,18 @@ function showWeatherCurrentDay(response) {
   icon.classList.add(weatherIconMap[response.data.weather[0].icon]);
 }
 
+function showAdditionalInformation(response) {
+  console.log(response.data);
+
+  let likelihoodOfRain = document.querySelector("#rain-likelihood");
+  let UVIndex = document.querySelector("#uv-index");
+
+  likelihoodOfRain.innerHTML = `${Math.round(
+    response.data.hourly[0].pop * 100
+  )}%`;
+  UVIndex.innerHTML = `${Math.round(response.data.current.uvi)}`;
+}
+
 function formatForecastDay(timestamp) {
   let date = new Date(timestamp * 1000);
   let day = date.getDay();
@@ -154,7 +166,10 @@ function showWeatherForecast(response) {
 function getWeatherForecast(coordinates) {
   let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=${unit}`;
 
-  axios.get(apiUrl).then(showWeatherForecast);
+  axios.get(apiUrl).then((response) => {
+    showWeatherForecast(response);
+    showAdditionalInformation(response);
+  });
 }
 
 function showCityBySearch() {
@@ -268,7 +283,12 @@ function loadStartingPage() {
   let city = "München";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
 
-  axios.get(apiUrl).then(showWeatherCurrentDay).then(showCurrentDate);
+  axios.get(apiUrl).then((response) => {
+    showWeatherCurrentDay(response);
+    showCityByGeo(response);
+    showCurrentDate();
+    getWeatherForecast(response.data.coord);
+  });
 }
 
 function getCurrentPosition() {
