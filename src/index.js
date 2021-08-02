@@ -105,6 +105,43 @@ function showWeatherCurrentDay(response) {
   icon.classList.add(weatherIconMap[response.data.weather[0].icon]);
 }
 
+function displayForecast() {
+  let forecastElement = document.querySelector("#forecast");
+
+  let forecastHTML = "";
+  let days = ["SAT", "SUN", "MON", "TUE", "WED"];
+
+  days.forEach(function (day) {
+    forecastHTML =
+      forecastHTML +
+      `
+  <div class="col" id="forecast-1">
+    <div class="card text-center" id="forecast-1-card">
+      <div class="card-body">
+        <h5 class="card-title">
+           <i class="bi bi-cloud"></i>
+        </h5>
+        <p class="card-subtitle mb-2">${day}</p>
+        <p class="card-text">
+         <span class="col temp-max"
+          ><i class="bi bi-arrow-up"></i>
+          <span class="temp">13</span>°</span
+         >
+
+         <span class="col temp-min"
+          ><i class="bi bi-arrow-down"></i>
+          <span class="temp">8</span>°</span
+         >
+        </p>
+      </div>
+    </div>
+  </div>
+`;
+  });
+
+  forecastElement.innerHTML = forecastHTML;
+}
+
 function showCityBySearch() {
   let cityOld = document.querySelector("#current-city");
   let city = document.querySelector("#city-search")?.value;
@@ -228,6 +265,8 @@ citySearchFormButton.addEventListener("click", selectCityBySearch);
 currentLocationButton.addEventListener("click", getCurrentPosition);
 
 loadStartingPage();
+
+displayForecast();
 
 //Change Temperature Unit
 function calculateFahrenheitToCelcius(tempFahrenheit) {
