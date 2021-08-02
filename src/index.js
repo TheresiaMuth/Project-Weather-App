@@ -105,41 +105,56 @@ function showWeatherCurrentDay(response) {
   icon.classList.add(weatherIconMap[response.data.weather[0].icon]);
 }
 
-function displayForecast() {
+function formatForecastDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+
+  return days[day];
+}
+
+function showWeatherForecast(response) {
+  let forecast = response.data.daily;
+
   let forecastElement = document.querySelector("#forecast");
 
   let forecastHTML = "";
-  let days = ["SAT", "SUN", "MON", "TUE", "WED"];
-
-  days.forEach(function (day) {
-    forecastHTML =
-      forecastHTML +
-      `
+  forecast.forEach(function (forecastDay, index) {
+    if (index < 5) {
+      forecastHTML =
+        forecastHTML +
+        `
   <div class="col" id="forecast-1">
     <div class="card text-center" id="forecast-1-card">
       <div class="card-body">
         <h5 class="card-title">
-           <i class="bi bi-cloud"></i>
+           <i class="bi ${weatherIconMap[forecastDay.weather[0].icon]}"></i>
         </h5>
-        <p class="card-subtitle mb-2">${day}</p>
+        <p class="card-subtitle mb-2">${formatForecastDay(forecastDay.dt)}</p>
         <p class="card-text">
          <span class="col temp-max"
           ><i class="bi bi-arrow-up"></i>
-          <span class="temp">13</span>°</span
+          <span class="temp">${Math.round(forecastDay.temp.max)}</span>°</span
          >
 
          <span class="col temp-min"
           ><i class="bi bi-arrow-down"></i>
-          <span class="temp">8</span>°</span
+          <span class="temp">${Math.round(forecastDay.temp.min)}</span>°</span
          >
         </p>
       </div>
     </div>
   </div>
 `;
+    }
   });
 
   forecastElement.innerHTML = forecastHTML;
+}
+
+function getWeatherForecast(coordinates) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=${unit}`;
+
+  axios.get(apiUrl).then(showWeatherForecast);
 }
 
 function showCityBySearch() {
@@ -210,6 +225,7 @@ function selectCityBySearch(event) {
       showWeatherCurrentDay(response);
       showCityBySearch(response);
       showCurrentDate();
+      getWeatherForecast(response.data.coord);
       resetSearchForm();
       if (isFahrenheit) {
         displayTemperatureAsFahrenheit();
@@ -234,6 +250,7 @@ function selectCityByGeo(position) {
       showWeatherCurrentDay(response);
       showCityByGeo(response);
       showCurrentDate();
+      getWeatherForecast(response.data.coord);
       resetSearchForm();
       if (isFahrenheit) {
         displayTemperatureAsFahrenheit();
@@ -265,8 +282,6 @@ citySearchFormButton.addEventListener("click", selectCityBySearch);
 currentLocationButton.addEventListener("click", getCurrentPosition);
 
 loadStartingPage();
-
-displayForecast();
 
 //Change Temperature Unit
 function calculateFahrenheitToCelcius(tempFahrenheit) {
