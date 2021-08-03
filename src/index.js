@@ -42,13 +42,15 @@ let unit = "metric";
 
 let isFahrenheit = false;
 
-let temperatureCelcius = null;
-
 let citySearchForm = document.querySelector("#city-searchbar");
 
 let citySearchFormButton = document.querySelector("#button-go");
 
 let currentLocationButton = document.querySelector("#current-location-button");
+
+function showTemp(temp) {
+  return isFahrenheit ? Math.round(calculateCelciusToFahrenheit(temp)) : Math.round(temp);
+}
 
 function showCurrentDate() {
   let now = new Date();
@@ -63,40 +65,18 @@ function showCurrentDate() {
   }
 
   let dateNow = document.querySelector("#current-date");
-  dateNow.innerHTML = `${currentDay} | ${currentMonth} ${currentDate} | ${currentHour}:${currentMinute(
-    now
-  )}`;
+  dateNow.innerHTML = `${currentDay} | ${currentMonth} ${currentDate} | ${currentHour}:${currentMinute(now)}`;
 }
 
 function showWeatherCurrentDay(response) {
-  temperatureCelcius = response.data.main.temp;
-  let currentTemperature = Math.round(temperatureCelcius);
-  let maxTemperature = Math.round(response.data.main.temp_max);
-  let minTemperature = Math.round(response.data.main.temp_min);
-  let feltLike = Math.round(response.data.main.feels_like);
-  let humidity = Math.round(response.data.main.humidity);
-  let windSpeed = Math.round(response.data.wind.speed * 10) / 10;
-  let currenWeatherDescription = response.data.weather[0].main;
+  document.querySelector("#current-temperature").innerHTML = showTemp(response.data.main.temp);
+  document.querySelector("#today-max").innerHTML = showTemp(response.data.main.temp_max);
+  document.querySelector("#today-min").innerHTML = showTemp(response.data.main.temp_min);
+  document.querySelector("#felt-like").innerHTML = showTemp(response.data.main.feels_like);
 
-  let displayCurrentTemperature = document.querySelector(
-    "#current-temperature"
-  );
-  let displayMaxTemperature = document.querySelector("#today-max");
-  let displayMinTemperature = document.querySelector("#today-min");
-  let displayFeltLike = document.querySelector("#felt-like");
-  let displayHumidity = document.querySelector("#humidity");
-  let displayWindSpeed = document.querySelector("#wind-speed");
-  let displayCurrenWeatherDescription = document.querySelector(
-    "#current-weather-description"
-  );
-
-  displayCurrentTemperature.innerHTML = `${currentTemperature}`;
-  displayMaxTemperature.innerHTML = `${maxTemperature}`;
-  displayMinTemperature.innerHTML = `${minTemperature}`;
-  displayFeltLike.innerHTML = `${feltLike}`;
-  displayHumidity.innerHTML = `${humidity}`;
-  displayWindSpeed.innerHTML = `${windSpeed}`;
-  displayCurrenWeatherDescription.innerHTML = `${currenWeatherDescription}`;
+  document.querySelector("#humidity").innerHTML = Math.round(response.data.main.humidity);
+  document.querySelector("#wind-speed").innerHTML = Math.round(response.data.wind.speed * 10) / 10;
+  document.querySelector("#current-weather-description").innerHTML = response.data.weather[0].main;
 
   let icon = document.querySelector("#weather-icon");
   for (const [key, value] of Object.entries(weatherIconMap)) {
@@ -111,9 +91,7 @@ function showAdditionalInformation(response) {
   let likelihoodOfRain = document.querySelector("#rain-likelihood");
   let UVIndex = document.querySelector("#uv-index");
 
-  likelihoodOfRain.innerHTML = `${Math.round(
-    response.data.hourly[0].pop * 100
-  )}%`;
+  likelihoodOfRain.innerHTML = `${Math.round(response.data.hourly[0].pop * 100)}%`;
   UVIndex.innerHTML = `${Math.round(response.data.current.uvi)}`;
 }
 
@@ -145,12 +123,12 @@ function showWeatherForecast(response) {
         <p class="card-text">
          <span class="col temp-max"
           ><i class="bi bi-arrow-up"></i>
-          <span class="temp">${Math.round(forecastDay.temp.max)}</span>°</span
+          <span class="temp">${showTemp(forecastDay.temp.max)}</span>°</span
          >
 
          <span class="col temp-min"
           ><i class="bi bi-arrow-down"></i>
-          <span class="temp">${Math.round(forecastDay.temp.min)}</span>°</span
+          <span class="temp">${showTemp(forecastDay.temp.min)}</span>°</span
          >
         </p>
       </div>
@@ -242,9 +220,6 @@ function selectCityBySearch(event) {
       showCurrentDate();
       getWeatherForecast(response.data.coord);
       resetSearchForm();
-      if (isFahrenheit) {
-        displayTemperatureAsFahrenheit();
-      }
     })
     .catch((error) => {
       showDataNotAvailable();
@@ -267,9 +242,6 @@ function selectCityByGeo(position) {
       showCurrentDate();
       getWeatherForecast(response.data.coord);
       resetSearchForm();
-      if (isFahrenheit) {
-        displayTemperatureAsFahrenheit();
-      }
     })
     .catch((error) => {
       showDataNotAvailable();
