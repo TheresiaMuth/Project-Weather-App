@@ -81,8 +81,6 @@ function showWeatherCurrentDay(response) {
 }
 
 function showAdditionalInformation(response) {
-  console.log(response);
-
   document.querySelector("#rain-likelihood").innerHTML = `${Math.round(response.data.hourly[0].pop * 100)}%`;
   document.querySelector("#uv-index").innerHTML = `${Math.round(response.data.current.uvi)}`;
   document.querySelector("#humidity").innerHTML = Math.round(response.data.current.humidity);
