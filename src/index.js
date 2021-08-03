@@ -70,8 +70,6 @@ function showCurrentDate() {
 
 function showWeatherCurrentDay(response) {
   document.querySelector("#current-temperature").innerHTML = showTemp(response.data.main.temp);
-  document.querySelector("#today-max").innerHTML = showTemp(response.data.main.temp_max);
-  document.querySelector("#today-min").innerHTML = showTemp(response.data.main.temp_min);
   document.querySelector("#felt-like").innerHTML = showTemp(response.data.main.feels_like);
 
   document.querySelector("#humidity").innerHTML = Math.round(response.data.main.humidity);
@@ -86,8 +84,6 @@ function showWeatherCurrentDay(response) {
 }
 
 function showAdditionalInformation(response) {
-  console.log(response.data);
-
   let likelihoodOfRain = document.querySelector("#rain-likelihood");
   let UVIndex = document.querySelector("#uv-index");
 
@@ -105,11 +101,14 @@ function formatForecastDay(timestamp) {
 function showWeatherForecast(response) {
   let forecast = response.data.daily;
 
+  document.querySelector("#today-max").innerHTML = showTemp(forecast[0].temp.max);
+  document.querySelector("#today-min").innerHTML = showTemp(forecast[0].temp.min);
+
   let forecastElement = document.querySelector("#forecast");
 
   let forecastHTML = "";
   forecast.forEach(function (forecastDay, index) {
-    if (index < 5) {
+    if (index > 0 && index < 6) {
       forecastHTML =
         forecastHTML +
         `
