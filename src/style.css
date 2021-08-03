@@ -25,9 +25,12 @@ body {
 }
 
 #current-weather-description,
-#today-max-min,
-#unit-selection {
+#today-max-min {
   font-size: 24px;
+}
+
+#unit-selection {
+  font-size: 26px;
 }
 
 #current-weather-description,
@@ -48,13 +51,19 @@ body {
 }
 
 #current-temperature {
-  font-size: 90px;
+  font-size: 84px;
   font-weight: 100;
 }
 
 #current-weather-icon {
   font-size: 110px;
   -webkit-text-stroke: 5px rgb(16 0 48 / 96%);
+}
+
+#forecast-card,
+#current-temperature {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .card {

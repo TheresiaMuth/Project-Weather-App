@@ -71,9 +71,6 @@ function showCurrentDate() {
 function showWeatherCurrentDay(response) {
   document.querySelector("#current-temperature").innerHTML = showTemp(response.data.main.temp);
   document.querySelector("#felt-like").innerHTML = showTemp(response.data.main.feels_like);
-
-  document.querySelector("#humidity").innerHTML = Math.round(response.data.main.humidity);
-  document.querySelector("#wind-speed").innerHTML = Math.round(response.data.wind.speed * 10) / 10;
   document.querySelector("#current-weather-description").innerHTML = response.data.weather[0].main;
 
   let icon = document.querySelector("#weather-icon");
@@ -84,11 +81,12 @@ function showWeatherCurrentDay(response) {
 }
 
 function showAdditionalInformation(response) {
-  let likelihoodOfRain = document.querySelector("#rain-likelihood");
-  let UVIndex = document.querySelector("#uv-index");
+  console.log(response);
 
-  likelihoodOfRain.innerHTML = `${Math.round(response.data.hourly[0].pop * 100)}%`;
-  UVIndex.innerHTML = `${Math.round(response.data.current.uvi)}`;
+  document.querySelector("#rain-likelihood").innerHTML = `${Math.round(response.data.hourly[0].pop * 100)}%`;
+  document.querySelector("#uv-index").innerHTML = `${Math.round(response.data.current.uvi)}`;
+  document.querySelector("#humidity").innerHTML = Math.round(response.data.current.humidity);
+  document.querySelector("#wind-speed").innerHTML = Math.round(response.data.current.wind_speed * 10) / 10;
 }
 
 function formatForecastDay(timestamp) {
@@ -112,8 +110,8 @@ function showWeatherForecast(response) {
       forecastHTML =
         forecastHTML +
         `
-  <div class="col" id="forecast-1">
-    <div class="card text-center" id="forecast-1-card">
+  <div class="col" id="forecast-card">
+    <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">
            <i class="bi ${weatherIconMap[forecastDay.weather[0].icon]}"></i>
@@ -176,7 +174,10 @@ function showDataNotAvailable() {
     document.querySelector("#felt-like"),
     document.querySelector("#humidity"),
     document.querySelector("#wind-speed"),
+    document.querySelector("#rain-likelihood"),
+    document.querySelector("#uv-index"),
     document.querySelector("#current-weather-description"),
+    document.querySelector("#forecast"),
   ];
 
   cityOld.style.fontSize = "28px";
